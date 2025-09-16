@@ -1,12 +1,10 @@
 use std::sync::Mutex;
 
-const HISTORY_LIMIT: usize = 300;
-
-pub struct Log {
+struct Log {
     history: Vec<String>,
 }
 
-pub static LOG: Mutex<Log> = Mutex::new(Log {
+static LOG: Mutex<Log> = Mutex::new(Log {
     history: Vec::new(),
 });
 
