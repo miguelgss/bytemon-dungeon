@@ -7,6 +7,7 @@ pub struct Anim {
     frame_height: f32,
     current_frame: usize,
     frame_count: usize,
+    first_frame: usize,
     row: usize,
     frame_time: f64,
     frame_duration: f64,
@@ -28,6 +29,7 @@ impl Anim {
             frame_width,
             frame_height,
             current_frame: 0,
+            first_frame: 0,
             frame_count,
             row,
             frame_time: 0.0,
@@ -46,6 +48,26 @@ impl Anim {
         }
     }
 
+    pub fn d_new_action(texture: Rc<Texture2D>, row: usize) -> Self {
+        Anim {
+            texture,
+            row,
+            frame_count: 1,
+            first_frame: 2,
+            ..Default::default()
+        }
+    }
+
+    pub fn d_new_defeated(texture: Rc<Texture2D>, row: usize) -> Self {
+        Anim {
+            texture,
+            row,
+            frame_count: 1,
+            first_frame: 3,
+            ..Default::default()
+        }
+    }
+
     pub fn update(&mut self, delta: f64) {
         self.frame_time += delta;
         if self.frame_time >= self.frame_duration {
@@ -56,7 +78,8 @@ impl Anim {
 
     pub fn draw(&self, x: f32, y: f32) {
         let src_rect = Rect {
-            x: self.current_frame as f32 * (self.frame_width + self.x_offset),
+            x: (self.current_frame as f32 + self.first_frame as f32)
+                * (self.frame_width + self.x_offset),
             y: self.row as f32 * (self.frame_height + self.y_offset),
             w: self.frame_width,
             h: self.frame_height,
@@ -87,6 +110,7 @@ impl Default for Anim {
             frame_width: 16f32,
             frame_height: 16f32,
             current_frame: 0,
+            first_frame: 0,
             frame_count: 4,
             row: 0,
             frame_time: 0.0,

@@ -31,20 +31,31 @@ async fn main() {
     world.print_map_other_origin();
     world.print_map();
 
+    test_animations().await;
+}
+
+async fn test_animations() {
     let texture = Rc::new(load_texture("resources/rookie_sheet.png").await.unwrap());
     texture.set_filter(FilterMode::Nearest);
 
-    let mut animation = Anim::d_new_idle(Rc::clone(&texture), 0);
-    let mut animation2 = Anim::d_new_idle(Rc::clone(&texture), 1);
+    let animation = Anim::d_new_idle(Rc::clone(&texture), 0);
+    let animation2 = Anim::d_new_idle(Rc::clone(&texture), 1);
+    let animation3 = Anim::d_new_action(Rc::clone(&texture), 0);
+    let animation4 = Anim::d_new_defeated(Rc::clone(&texture), 0);
+
+    let mut anims = [animation, animation2, animation3, animation4];
+    let positions: [(f32, f32); 4] = [(100., 100.), (130., 130.), (160., 160.), (190., 190.)];
+
     loop {
         clear_background(LIGHTGRAY);
 
-        let dt = get_frame_time() as f64;
-        animation.update(dt);
-        animation2.update(dt);
+        for a in anims.iter_mut() {
+            a.update(get_frame_time() as f64);
+        }
 
-        animation.draw(100.0, 100.0);
-        animation2.draw(120.0, 100.0);
+        for i in 0..4 {
+            anims[i].draw(positions[i].0, positions[1].1)
+        }
 
         next_frame().await;
     }
