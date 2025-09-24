@@ -3,7 +3,7 @@ use crate::engine::{actor::Actor, log::add_to_log};
 const PLAYER_CHAR: &str = "@";
 
 #[derive(Debug)]
-enum ETileType {
+pub enum ETileType {
     Floor,
     Wall,
 }
@@ -17,12 +17,12 @@ impl ETileType {
     }
 }
 
-struct Tile {
-    ttype: ETileType,
-    position: (i16, i16),
+pub struct Tile {
+    pub ttype: ETileType,
+    pub position: (i16, i16),
 }
 
-struct Map {
+pub struct Map {
     origin: (i16, i16),
     //end: (i16, i16),
     tiles: Vec<Tile>,
@@ -54,6 +54,10 @@ impl Map {
         }
         square_map
     }
+
+    pub fn get_tiles(&self) -> &Vec<Tile> {
+        &self.tiles
+    }
 }
 
 pub struct World {
@@ -79,6 +83,10 @@ impl World {
                 }
             }
         }
+    }
+
+    pub fn get_map(&self) -> &Map {
+        &self.map
     }
 
     pub fn print_map(&self) {
